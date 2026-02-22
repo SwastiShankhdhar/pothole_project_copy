@@ -27,63 +27,70 @@ const features = [
 
 const Home = () => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-white">
 
       <Header />
 
       {/* ================= HERO ================= */}
-<section className="relative h-screen w-full overflow-hidden">
+      <section className="relative h-screen w-full overflow-hidden">
 
-  {/* Background Image (light effect, NO overlay) */}
-  <img
-    src={heroImage}
-    alt="road"
-    className="absolute inset-0 h-full w-full object-cover brightness-25 contrast-5"
-  />
+        {/* Background Image */}
+        <img
+          src={heroImage}
+          alt="road"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-  {/* Content */}
-  <div className="relative z-10 flex h-full items-center px-8 md:px-20">
-    <div className="max-w-2xl">
+        {/* Smooth Whitish Bright Overlay (No Line Effect) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/75 to-white/50"></div>
 
-      <span className="mb-5 inline-block rounded-full bg-green-600 px-4 py-1 text-xs font-semibold text-white">
-        Pothole Detection System
-      </span>
+        {/* Content */}
+        <div className="relative z-10 flex h-full items-center px-8 md:px-20">
+          <div className="max-w-2xl">
 
-      <h1 className="mb-6 text-5xl font-bold text-black md:text-6xl">
-        Making Roads Safer,
-        <br />
-        One Pothole at a Time
-      </h1>
+            <span className="mb-5 inline-block rounded-md bg-gray-800 px-4 py-1.5 text-xs font-semibold text-white tracking-wide">
+              Pothole Detection System
+            </span>
 
-      <p className="mb-8 text-lg text-gray-800">
-        Report, track, and visualize road conditions in your city.
-        Help authorities fix roads faster with real-time pothole data.
-      </p>
+            <h1 className="mb-6 text-5xl font-bold text-gray-900 md:text-6xl leading-tight">
+              Making Roads Safer,
+              <br />
+              One Pothole at a Time
+            </h1>
 
-      <div className="flex gap-4">
-        <Link to="/signup">
-          <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700 transition">
-            Get Started →
-          </button>
-        </Link>
+            <p className="mb-8 text-lg text-gray-700">
+              Report, track, and visualize road conditions in your city.
+              Help authorities fix roads faster with real-time pothole data.
+            </p>
 
-        <Link to="/login">
-          <button className="rounded-lg border border-gray-400 px-6 py-3 hover:bg-gray-100 transition">
-            Sign In
-          </button>
-        </Link>
-      </div>
+            <div className="flex gap-4">
+              <Link to="/signup">
+                <button className="flex items-center gap-2 rounded-md bg-gray-900 px-6 py-3 text-white font-medium hover:bg-gray-800 transition">
+                  Get Started <ArrowRight size={18} />
+                </button>
+              </Link>
 
-    </div>
-  </div>
-</section>
+              {/* <Link to="/login">
+                <button className="rounded-md border border-gray-400 px-6 py-3 text-white-800 hover:bg-gray-100 transition">
+                  Sign In
+                </button>
+              </Link> */}
+              <Link to="/login">
+  <button className="rounded-md bg-gray-800 border border-gray-600 px-6 py-3 text-white hover:bg-gray-700 transition">
+    Sign In
+  </button>
+</Link>
+            </div>
 
+          </div>
+        </div>
+      </section>
 
       {/* ================= HOW IT WORKS ================= */}
-      <section className="bg-gray-50 py-20 px-6">
+      {/* <section className="bg-gray-50 py-20 px-6">
         <div className="mx-auto max-w-6xl text-center">
 
-          <h2 className="mb-3 text-3xl font-bold text-black">
+          <h2 className="mb-3 text-3xl font-bold text-gray-900">
             How It Works
           </h2>
 
@@ -98,15 +105,15 @@ const Home = () => {
               return (
                 <div
                   key={feature.title}
-                  className="rounded-xl border bg-white p-8 shadow-sm hover:shadow-md transition"
+                  className="rounded-lg border bg-white p-8 shadow-sm hover:shadow-md transition"
                 >
                   <div className="mb-4 flex justify-center">
-                    <div className="rounded-lg bg-blue-100 p-3">
-                      <Icon className="text-blue-600" size={22} />
+                    <div className="rounded-md bg-gray-100 p-3">
+                      <Icon className="text-gray-800" size={22} />
                     </div>
                   </div>
 
-                  <h3 className="mb-2 text-lg font-semibold">
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900">
                     {feature.title}
                   </h3>
 
@@ -118,52 +125,120 @@ const Home = () => {
             })}
           </div>
         </div>
-      </section>
+      </section> */}
+      <section className="bg-gray-50 py-20 px-6">
+  <div className="mx-auto max-w-6xl text-center">
+
+    <h2 className="mb-3 text-3xl font-bold text-gray-900">
+      Why We Built This
+    </h2>
+
+    <p className="mb-12 text-gray-600 max-w-3xl mx-auto">
+      Road safety is a major concern in many cities. Potholes not only damage vehicles
+      but also cause accidents and delays. We built this system to help detect,
+       and visualize road damage in real time so that authorities can
+      prioritize repairs efficiently and improve infrastructure quality.
+    </p>
+
+    <div className="grid gap-8 md:grid-cols-3 text-left">
+
+      <div className="rounded-lg border bg-white p-8 shadow-sm hover:shadow-md transition">
+        <h3 className="mb-3 text-lg font-semibold text-gray-900">
+          Improve Road Safety
+        </h3>
+        <p className="text-sm text-gray-600">
+          Help drivers avoid risky roads by providing clear and updated
+          pothole information.
+        </p>
+      </div>
+
+      <div className="rounded-lg border bg-white p-8 shadow-sm hover:shadow-md transition">
+        <h3 className="mb-3 text-lg font-semibold text-gray-900">
+          Support Authorities
+        </h3>
+        <p className="text-sm text-gray-600">
+          Provide structured data to help government teams
+          plan maintenance more effectively.
+        </p>
+      </div>
+
+      <div className="rounded-lg border bg-white p-8 shadow-sm hover:shadow-md transition">
+        <h3 className="mb-3 text-lg font-semibold text-gray-900">
+          Smart Monitoring
+        </h3>
+        <p className="text-sm text-gray-600">
+          Use technology to detect and track road conditions
+          in a modern and scalable way.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
 
       {/* ================= SEVERITY ================= */}
-      <section className="border-t bg-white py-16 px-6">
-        <div className="mx-auto max-w-4xl text-center">
+<section className="bg-gray-50 py-20 px-6">
+  <div className="mx-auto max-w-5xl text-center">
 
-          <h2 className="mb-8 text-3xl font-bold text-black">
-            Severity Color Coding
-          </h2>
+    <h2 className="mb-4 text-3xl font-bold text-gray-900">
+      Severity Color Coding
+    </h2>
 
-          <div className="grid gap-6 md:grid-cols-3">
+    <p className="mb-12 text-gray-600 max-w-2xl mx-auto">
+      Road conditions are categorized based on pothole intensity
+      to help users and authorities understand risk levels easily.
+    </p>
 
-            <div className="flex items-start gap-3 rounded-lg border p-4">
-              <span className="mt-1 h-4 w-4 rounded-full bg-red-500" />
-              <div className="text-left">
-                <p className="font-semibold">High Risk</p>
-                <p className="text-xs text-gray-600">
-                  Unsafe — many potholes detected
-                </p>
-              </div>
-            </div>
+    <div className="grid gap-8 md:grid-cols-3">
 
-            <div className="flex items-start gap-3 rounded-lg border p-4">
-              <span className="mt-1 h-4 w-4 rounded-full bg-yellow-500" />
-              <div className="text-left">
-                <p className="font-semibold">Moderate</p>
-                <p className="text-xs text-gray-600">
-                  Some potholes — drive with caution
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 rounded-lg border p-4">
-              <span className="mt-1 h-4 w-4 rounded-full bg-green-500" />
-              <div className="text-left">
-                <p className="font-semibold">Safe</p>
-                <p className="text-xs text-gray-600">
-                  Good condition — no potholes
-                </p>
-              </div>
-            </div>
-
+      {/* High Risk */}
+      <div className="rounded-xl bg-white p-8 shadow-sm border hover:shadow-md transition">
+        <div className="flex justify-center mb-4">
+          <div className="h-12 w-12 flex items-center justify-center rounded-full bg-red-100">
+            <span className="h-5 w-5 rounded-full bg-red-500"></span>
           </div>
         </div>
-      </section>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          High Risk
+        </h3>
+        <p className="text-sm text-gray-600">
+          Unsafe road conditions with multiple potholes detected.
+        </p>
+      </div>
 
+      {/* Moderate */}
+      <div className="rounded-xl bg-white p-8 shadow-sm border hover:shadow-md transition">
+        <div className="flex justify-center mb-4">
+          <div className="h-12 w-12 flex items-center justify-center rounded-full bg-yellow-100">
+            <span className="h-5 w-5 rounded-full bg-yellow-500"></span>
+          </div>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          Moderate
+        </h3>
+        <p className="text-sm text-gray-600">
+          Some potholes present. Drive carefully in these areas.
+        </p>
+      </div>
+
+      {/* Safe */}
+      <div className="rounded-xl bg-white p-8 shadow-sm border hover:shadow-md transition">
+        <div className="flex justify-center mb-4">
+          <div className="h-12 w-12 flex items-center justify-center rounded-full bg-green-100">
+            <span className="h-5 w-5 rounded-full bg-green-500"></span>
+          </div>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          Safe
+        </h3>
+        <p className="text-sm text-gray-600">
+          Road is in good condition with no pothole detection.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
       <Footer />
 
     </div>

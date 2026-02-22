@@ -1,13 +1,130 @@
-import { useState } from "react";
+
+// import { useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import { MapPin } from "lucide-react";
+// import Header from "../components/Header";
+// import Button from "../components/ui/Button";
+// import Input from "../components/ui/Input";
+// import Label from "../components/ui/Label";
+// import InputOTP from "../components/ui/InputOTP";
+
+// const SignUp = () => {
+//   const [email, setEmail] = useState("");
+//   const [otpSent, setOtpSent] = useState(false);
+//   const [otp, setOtp] = useState("");
+//   const navigate = useNavigate();
+
+//   const handleSendOtp = (e) => {
+//     e.preventDefault();
+//     if (email) setOtpSent(true);
+//   };
+
+//   const handleVerifyOtp = (e) => {
+//     e.preventDefault();
+//     if (otp.length === 6) navigate("/dashboard");
+//   };
+
+//   return (
+//     <div className="min-h-screen flex flex-col bg-gray-50">
+
+//       {/* <Header /> */}
+
+//       <main className="flex flex-1 items-center justify-center px-6 py-12">
+
+//         <div className="w-full max-w-md bg-white border rounded-2xl shadow-sm p-10">
+
+//           {/* Title */}
+//           <div className="text-center mb-10">
+//             <MapPin className="mx-auto mb-4 text-gray-800" size={36} />
+//             <h2 className="text-3xl font-bold text-gray-900">
+//               Create Your Account
+//             </h2>
+//             <p className="text-sm text-gray-600 mt-2">
+//               Join RoadWatch and start reporting roads
+//             </p>
+//           </div>
+
+//           {/* Form */}
+//           {!otpSent ? (
+//             <form onSubmit={handleSendOtp} className="space-y-6">
+
+//               <div>
+//                 <Label>Email Address</Label>
+//                 <Input
+//                   type="email"
+//                   placeholder="Enter email address"
+//                   value={email}
+//                   onChange={(e) => setEmail(e.target.value)}
+//                   className="mt-2"
+//                 />
+//               </div>
+
+//               <Button
+//                 type="submit"
+//                 className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3"
+//               >
+//                 Send OTP
+//               </Button>
+
+//             </form>
+//           ) : (
+//             <form onSubmit={handleVerifyOtp} className="space-y-6">
+
+//               <p className="text-sm text-center text-gray-600">
+//                 Enter OTP sent to{" "}
+//                 <span className="font-medium text-gray-900">{email}</span>
+//               </p>
+
+//               <InputOTP value={otp} onChange={setOtp} />
+
+//               <Button
+//                 type="submit"
+//                 disabled={otp.length < 6}
+//                 className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3 disabled:opacity-50"
+//               >
+//                 Verify & Create Account
+//               </Button>
+
+//               <button
+//                 type="button"
+//                 onClick={() => setOtpSent(false)}
+//                 className="text-sm text-gray-600 hover:text-gray-900 underline w-full"
+//               >
+//                 Change Email
+//               </button>
+
+//             </form>
+//           )}
+
+//           {/* Login Link */}
+//           <p className="text-center text-sm mt-10 text-gray-600">
+//             Already have an account?{" "}
+//             <Link
+//               to="/login"
+//               className="font-medium text-gray-900 hover:underline"
+//             >
+//               Sign In
+//             </Link>
+//           </p>
+
+//         </div>
+
+//       </main>
+//     </div>
+//   );
+// };
+
+// export default SignUp;import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
-import Header from "../components/Header";
+import { useState } from "react";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Label from "../components/ui/Label";
 import InputOTP from "../components/ui/InputOTP";
+import Dashboard from "./Dashboard"; // 👈 IMPORT ADDED
 
-const SignUp = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
@@ -20,48 +137,89 @@ const SignUp = () => {
 
   const handleVerifyOtp = (e) => {
     e.preventDefault();
-    if (otp.length === 6) navigate("/dashboard");
+
+    // 🔥 ANY 4 DIGIT OTP WILL WORK
+    if (otp.length === 4) {
+      navigate("/dashboard");
+    }
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
+    <div className="min-h-screen flex flex-col bg-gray-50">
 
-      <main className="flex flex-1 items-center justify-center px-4">
-        <div className="w-full max-w-sm border rounded-lg p-6 shadow">
+      <main className="flex flex-1 items-center justify-center px-6">
 
-          <div className="text-center mb-6">
-            <MapPin className="mx-auto mb-3 text-blue-600" size={28} />
-            <h2 className="text-2xl font-bold">Create Account</h2>
+        <div className="w-full max-w-md bg-white border rounded-2xl shadow-sm p-10">
+
+          <div className="text-center mb-10">
+            <MapPin className="mx-auto mb-4 text-gray-800" size={36} />
+            <h2 className="text-3xl font-bold text-gray-900">
+              Login to RoadWatch
+            </h2>
           </div>
 
           {!otpSent ? (
-            <form onSubmit={handleSendOtp} className="space-y-4">
-              <Label>Email Address</Label>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
-              <Button type="submit" className="w-full">
+            <form onSubmit={handleSendOtp} className="space-y-6">
+
+              <div>
+                <Label>Email Address</Label>
+                <Input
+                  type="email"
+                  placeholder="Enter email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-2"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3"
+              >
                 Send OTP
               </Button>
+
             </form>
           ) : (
-            <form onSubmit={handleVerifyOtp} className="space-y-4">
-              <InputOTP value={otp} onChange={setOtp} />
-              <Button type="submit" className="w-full">
-                Verify & Create Account
+            <form onSubmit={handleVerifyOtp} className="space-y-6">
+
+              <p className="text-sm text-center text-gray-600">
+                Enter 4-digit OTP sent to{" "}
+                <span className="font-medium text-gray-900">{email}</span>
+              </p>
+
+              <InputOTP
+                value={otp}
+                onChange={setOtp}
+                maxLength={4}   // 👈 4 DIGIT
+              />
+
+              <Button
+                type="submit"
+                disabled={otp.length < 4}
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3 disabled:opacity-50"
+              >
+                Verify & Login
               </Button>
+
             </form>
           )}
 
-          <p className="text-center text-sm mt-4">
-            Already have an account?{" "}
-            <Link to="/login" className="text-blue-600 underline">
-              Sign In
+          <p className="text-center text-sm mt-10 text-gray-600">
+            Don’t have an account?{" "}
+            <Link
+              to="/signup"
+              className="font-medium text-gray-900 hover:underline"
+            >
+              Sign Up
             </Link>
           </p>
+
         </div>
+
       </main>
     </div>
   );
 };
 
-export default SignUp;
+export default Login;
