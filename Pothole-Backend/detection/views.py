@@ -1,10 +1,27 @@
+""" ERROR -What this error actually means
+Import ".yolo_service" could not be resolved
+
+This happens when:
+
+You are using a relative import (.)
+But Python doesn’t recognize your folder as a package
+🧠 Key concept (very important)
+Relative import:
+from .yolo_service import something
+
+👉 This ONLY works if:
+
+Your file is inside a package
+And the package has __init__.py"""
+
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from .models import DetectionResult
 from .serializers import DetectionRequestSerializer, DetectionResultSerializer
-from .yolo_service import load_image_from_file, load_image_from_url, run_inference
+from .yolo_services import load_image_from_file, load_image_from_url, run_inference
 
 
 class DetectPotholeView(APIView):
