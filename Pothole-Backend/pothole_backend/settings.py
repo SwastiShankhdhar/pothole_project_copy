@@ -2,13 +2,16 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ─── Security ────────────────────────────────────────────────────────────────
 SECRET_KEY = os.getenv('SECRET_KEY', 'change-me-in-production')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # ─── Applications ────────────────────────────────────────────────────────────
 DJANGO_APPS = [
@@ -27,8 +30,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'detection',       # Module 1 – YOLO inference
-    'geolocation',     # Module 2 – Geolocation / Maps (future)
-    'reporting',       # Module 3 – Reporting / Analytics (future)
+    'geolocation',     # Module 2 – Geolocation / Maps
+    'reporting',       # Module 3 – Reporting / Analytics
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -66,17 +69,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pothole_backend.wsgi.application'
 ASGI_APPLICATION = 'pothole_backend.asgi.application'
 
-# ─── Database – PostgreSQL ────────────────────────────────────────────────────
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME':     os.getenv('DB_NAME', 'pothole_db'),
-        'USER':     os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST':     os.getenv('DB_HOST', 'localhost'),
-        'PORT':     os.getenv('DB_PORT', '5432'),
+# ─── Database – PostgreSQL with fallback to SQLite ────────────────────────────
+# Check if PostgreSQL is configured, otherwise use SQLite
+if os.getenv('DB_NAME'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME', 'pothole_db'),
+            'USER': os.getenv('DB_USER', 'postgres'),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', '5432'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # ─── Authentication ───────────────────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
@@ -86,7 +98,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ─── DRF – Session Authentication ────────────────────────────────────────────
+# ─── DRF Configuration ────────────────────────────────────────────────────────
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -103,9 +115,15 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ─── CORS ─────────────────────────────────────────────────────────────────────
-CORS_ALLOW_ALL_ORIGINS = DEBUG  # tighten in production
+# ─── CORS Configuration ───────────────────────────────────────────────────────
+CORS_ALLOW_ALL_ORIGINS = DEBUG  # Tighten in production
 CORS_ALLOW_CREDENTIALS = True
+
+# For production, you can specify allowed origins:
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+# ]
 
 # ─── Internationalisation ─────────────────────────────────────────────────────
 LANGUAGE_CODE = 'en-us'
@@ -120,7 +138,12 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / os.getenv('MEDIA_ROOT', 'media')
 
-# ─── ML Model ─────────────────────────────────────────────────────────────────
+# ─── ML Model Configuration ───────────────────────────────────────────────────
 MODEL_PATH = BASE_DIR / os.getenv('MODEL_PATH', 'models/pothole.pt')
 
+# ─── External Services ────────────────────────────────────────────────────────
+DJANGO_URL = os.getenv('DJANGO_URL', 'http://localhost:8000')
+GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
+
+# ─── Default primary key field type ───────────────────────────────────────────
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
