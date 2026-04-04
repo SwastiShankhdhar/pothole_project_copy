@@ -1,8 +1,0 @@
-{
-    "python.defaultInterpreterPath": "${workspaceFolder}/vpothole/Scripts/python.exe",
-    "python.terminal.activateEnvironment": true,
-    "django.settingsModule": "pothole_backend.settings",
-    "[python]": {
-        "editor.formatOnSave": true
-    }
-}

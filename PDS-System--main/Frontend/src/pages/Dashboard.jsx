@@ -2,6 +2,8 @@ import { useState } from "react";
 import Camera from "../components/Camera";
 import MapComponent from "../components/Map";
 import Header from "../components/Header";
+// import MapWithMarkers from "../components/MapWithMarker";
+// import LocationTracker from "../components/LocationTracker";
 function Dashboard() {
   const [markers, setMarkers] = useState([]);
 
@@ -18,13 +20,14 @@ function Dashboard() {
       <div style={{ width: "50%" }}>
         <Camera updateMapLocation={updateMapLocation} />
       </div>
-
+{/* <MapWithMarkers />  */}
       {/* RIGHT SIDE → MAP */}
       <div style={{ width: "50%" }}>
         <MapComponent markers={markers} />
       </div>
 
     </div>
+    {/* <LocationTracker /> */}
     </>
   );
 }
