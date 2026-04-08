@@ -1,125 +1,137 @@
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const Camera = ({ updateMapLocation }) => {
+function Camera({ updateMapLocation }) {
   const videoRef = useRef(null);
+  const streamRef = useRef(null);
+  const [isCameraOn, setIsCameraOn] = useState(false);
 
-  // 🎥 START CAMERA (ONLY ONCE)
-  useEffect(() => {
-    const startCamera = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.log("Camera error:", err);
-      }
-    };
+  // ▶️ Start Camera
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
 
-    startCamera();
-  }, []);
+      streamRef.current = stream;
+      videoRef.current.srcObject = stream;
+      setIsCameraOn(true);
+    } catch (err) {
+      console.error("Camera error:", err);
+    }
+  };
 
-  // 📍 GET LOCATION ON LOAD (SEPARATE EFFECT)
-  useEffect(() => {
+  // ⛔ Stop Camera
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+      setIsCameraOn(false);
+    }
+  };
+
+  // 🔥 Detect Pothole (NEW FEATURE)
+  // const detectPothole = () => {
+  //   alert("⚠️ Pothole Detected!");
+
+  //   navigator.geolocation.getCurrentPosition((pos) => {
+  //     const lat = pos.coords.latitude;
+  //     const lng = pos.coords.longitude;
+
+  //     updateMapLocation(lat, lng); // 📍 send to map
+  //   });
+  // };
+
+const detectPothole = () => {
+  alert("⚠️ Pothole Detected! Click OK to mark location");
+
+  setTimeout(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
 
-        console.log("Initial location:", lat, lng);
-
-        updateMapLocation(lat, lng); // only once
+        updateMapLocation(lat, lng); // 📍 AFTER alert
       },
-      (err) => console.log("Location error:", err)
-    );
-  }, [updateMapLocation]);
-
-  // 📍 GET LOCATION FUNCTION
-  const getLocation = () => {
-    return new Promise((resolve, reject) => {
-      // navigator.geolocation.getCurrentPosition(
-      //   (pos) =>
-      //     resolve({
-      //       lat: pos.coords.latitude,
-      //       lng: pos.coords.longitude,
-      //     }),
-      //   reject
-      // );
-      navigator.geolocation.getCurrentPosition(
-  (pos) => {
-    resolve({
-      lat: pos.coords.latitude,
-      lng: pos.coords.longitude,
-    });
-  },
-  reject,
-  {
-    enableHighAccuracy: true,   // 🔥 IMPORTANT
-    timeout: 10000,
-    maximumAge: 0,
-  }
-);
-    });
-  };
-
-  // 🖼 CAPTURE FRAME
-  const captureFrame = () => {
-    const video = videoRef.current;
-
-    if (!video || video.videoWidth === 0) return null;
-
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0);
-
-    return canvas.toDataURL("image/jpeg");
-  };
-
-  // 🚀 DETECTION LOOP
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      try {
-        const location = await getLocation();
-        const image_base64 = captureFrame();
-
-        if (!image_base64) return;
-
-        const res = await fetch("http://localhost:8000/api/detection/camera/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            latitude: location.lat,
-            longitude: location.lng,
-            image_base64: image_base64,
-          }),
-        });
-
-        const data = await res.json();
-
-        console.log("Detection:", data);
-
-        if (data.detected) {
-          updateMapLocation(location.lat, location.lng);
-        }
-      } catch (err) {
-        console.log(err);
+      (err) => {
+        console.error(err);
+        alert("Location permission denied");
       }
-    }, 4000);
+    );
+  }, 200); // 🔥 small delay (IMPORTANT)
+};
 
-    return () => clearInterval(interval);
-  }, [updateMapLocation]);
+  // Auto start
+  useEffect(() => {
+    startCamera();
+    return () => stopCamera();
+  }, []);
 
   return (
-    <div style={{ width: "100%" }}>
-      <video ref={videoRef} autoPlay playsInline style={{ width: "100%" }} />
+    <div
+      style={{
+        background: "#000",
+        borderRadius: "10px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        overflow: "hidden",
+      }}
+    >
+      {/* 🎥 Video */}
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+      />
+
+      {/* 🔘 Controls */}
+      <div
+        style={{
+          padding: "10px",
+          background: "rgba(0,0,0,0.6)",
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          flexWrap: "wrap",
+        }}
+      >
+        {!isCameraOn ? (
+          <button onClick={startCamera} style={buttonStyle("#28a745")}>
+            ▶ Start
+          </button>
+        ) : (
+          <>
+            <button onClick={stopCamera} style={buttonStyle("#dc3545")}>
+              ⛔ Stop
+            </button>
+
+            {/* 🔥 NEW Detect Button */}
+            <button onClick={detectPothole} style={buttonStyle("#ffc107")}>
+              ⚠️ Detect
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
-};
+}
+
+// 🎨 Button style
+const buttonStyle = (bg) => ({
+  background: bg,
+  color: "#000",
+  border: "none",
+  padding: "10px 18px",
+  borderRadius: "8px",
+  cursor: "pointer",
+  fontWeight: "bold",
+});
 
 export default Camera;
